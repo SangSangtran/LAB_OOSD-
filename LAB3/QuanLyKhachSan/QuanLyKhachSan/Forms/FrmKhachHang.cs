@@ -1,58 +1,85 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using QuanLyKhachSan.Data;
+using System.Windows.Forms;
+using QuanLyKhachSan.Services;
 
-namespace QuanLyKhachSan.Services
+namespace QuanLyKhachSan
 {
-    public class KhachHangService
+    public partial class FrmKhachHang : Form
     {
-        public DataTable LayDanhSach()
+        private KhachHangService khService = new KhachHangService();
+
+        public FrmKhachHang()
         {
-            return Db.Query("SELECT MaKhach AS [Mã KH], HoTen AS [Họ Tên], SoCMND AS [CMND/CCCD], QuocTich AS [Quốc Tịch], SoDienThoai AS [Điện Thoại] FROM KhachHang");
+            InitializeComponent();
+
+            this.Load += FrmKhachHang_Load;
+            dgvKhachHang.CellClick += DgvKhachHang_CellClick;
+            btnThem.Click += BtnThem_Click;
+            btnSua.Click += BtnSua_Click;
+            btnXoa.Click += BtnXoa_Click;
         }
 
-        public bool Them(string ma, string ten, string cmnd, string quocTich, string sdt)
+        private void LoadDuLieu()
         {
-            string sql = "INSERT INTO KhachHang (MaKhach, HoTen, SoCMND, QuocTich, SoDienThoai) VALUES (@ma, @ten, @cmnd, @qt, @sdt)";
-            try
-            {
-                int rows = Db.Execute(sql,
-                    new SqlParameter("@ma", ma),
-                    new SqlParameter("@ten", ten),
-                    new SqlParameter("@cmnd", cmnd),
-                    new SqlParameter("@qt", quocTich),
-                    new SqlParameter("@sdt", sdt));
-                return rows > 0;
-            }
-            catch { return false; }
+            dgvKhachHang.DataSource = khService.LayDanhSach();
         }
 
-        public bool Sua(string ma, string ten, string cmnd, string quocTich, string sdt)
+        private void FrmKhachHang_Load(object sender, EventArgs e)
         {
-            string sql = "UPDATE KhachHang SET HoTen=@ten, SoCMND=@cmnd, QuocTich=@qt, SoDienThoai=@sdt WHERE MaKhach=@ma";
-            try
-            {
-                int rows = Db.Execute(sql,
-                    new SqlParameter("@ma", ma),
-                    new SqlParameter("@ten", ten),
-                    new SqlParameter("@cmnd", cmnd),
-                    new SqlParameter("@qt", quocTich),
-                    new SqlParameter("@sdt", sdt));
-                return rows > 0;
-            }
-            catch { return false; }
+            LoadDuLieu();
         }
 
-        public bool Xoa(string ma)
+        private void DgvKhachHang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            string sql = "DELETE FROM KhachHang WHERE MaKhach=@ma";
-            try
+            if (e.RowIndex >= 0)
             {
-                int rows = Db.Execute(sql, new SqlParameter("@ma", ma));
-                return rows > 0;
+                DataGridViewRow row = dgvKhachHang.Rows[e.RowIndex];
+                txtMaKH.Text = row.Cells["Mã KH"].Value.ToString();
+                txtTenKH.Text = row.Cells["Họ Tên"].Value.ToString();
+                txtDienThoai.Text = row.Cells["Điện Thoại"].Value.ToString();
             }
-            catch { return false; }
+        }
+
+        private void BtnThem_Click(object sender, EventArgs e)
+        {
+            if (khService.Them(txtMaKH.Text, txtTenKH.Text, "000000000", "Việt Nam", txtDienThoai.Text))
+            {
+                MessageBox.Show("Thêm khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDuLieu();
+            }
+            else
+            {
+                MessageBox.Show("Thêm thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnSua_Click(object sender, EventArgs e)
+        {
+            if (khService.Sua(txtMaKH.Text, txtTenKH.Text, "000000000", "Việt Nam", txtDienThoai.Text))
+            {
+                MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDuLieu();
+            }
+            else
+            {
+                MessageBox.Show("Sửa thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXoa_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn có chắc chắn muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                if (khService.Xoa(txtMaKH.Text))
+                {
+                    MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDuLieu();
+                }
+                else
+                {
+                    MessageBox.Show("Không thể xóa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
