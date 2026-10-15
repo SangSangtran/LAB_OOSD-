@@ -1,0 +1,9 @@
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.csproj.AssemblyReference.cache
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.Properties.Resources.resources
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.csproj.GenerateResource.cache
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.csproj.CoreCompileInputs.cache
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\bin\Debug\frmMain.cs.exe.config
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\bin\Debug\frmMain.cs.exe
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\bin\Debug\frmMain.cs.pdb
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.exe
+D:\LAB_OOSD-\LAB5\Source\QuanLyDuLich\frmMain.cs\frmMain.cs\obj\Debug\frmMain.cs.pdb
