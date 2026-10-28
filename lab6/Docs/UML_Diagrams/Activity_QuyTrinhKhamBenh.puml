@@ -1,0 +1,57 @@
+@startuml Activity_QuyTrinhKhamBenh
+|#E3F2FD|Bệnh nhân|
+|#FFF9C4|Nhân viên Tiếp nhận / CSKH|
+|#E8F5E9|Bác sĩ|
+|#F3E5F5|Phòng Xét nghiệm|
+
+|Bệnh nhân|
+start
+:Đến bệnh viện đăng ký khám;
+
+|Nhân viên Tiếp nhận / CSKH|
+:Tiếp nhận yêu cầu khám;
+if (Khám lần đầu?) then (Đúng)
+    :Yêu cầu điền Phiếu đăng ký & nộp ảnh 3x4;
+    :Thu lệ phí hằng năm;
+    :Cấp Mã hồ sơ bệnh án mới;
+else (Đã có hồ sơ)
+    :Nhận Mã hồ sơ hoặc tra cứu thông tin;
+    :Lấy hồ sơ bệnh án trên máy tính;
+endif
+:Phân phòng khám chuyên khoa;
+
+|Bác sĩ|
+:Tiếp nhận bệnh nhân & hồ sơ bệnh án;
+:Xem lý lịch bệnh án & sức khỏe trước đây;
+:Khám lâm sàng (đo thân nhiệt, huyết áp, hỏi triệu chứng);
+:Ghi nhận triệu chứng vào Phiếu khám bệnh;
+if (Cần làm xét nghiệm?) then (Có)
+    :Lập phiếu chỉ định xét nghiệm;
+    
+    |Phòng Xét nghiệm|
+    :Tiếp nhận bệnh nhân & mẫu bệnh phẩm;
+    :Tiến hành thực hiện xét nghiệm;
+    :Ghi nhận kết quả xét nghiệm lên hệ thống;
+    :Trả kết quả cho bệnh nhân/bác sĩ;
+    
+    |Bác sĩ|
+    :Xem xét kết quả xét nghiệm;
+else (Không)
+endif
+
+:Đưa ra kết luận chẩn đoán bệnh;
+:Lập toa thuốc điều trị trên hệ thống;
+:In toa thuốc & dặn dò bệnh nhân;
+
+|Bệnh nhân|
+:Nhận toa thuốc & nghe dặn dò;
+:Thanh toán viện phí tại quầy thu ngân;
+
+|Nhân viên Tiếp nhận / CSKH|
+:Ghi nhận thông tin đợt điều trị lên máy tính;
+:Lưu trữ hồ sơ xuất viện;
+
+|Bệnh nhân|
+:Ra về / Hoàn tất đợt khám;
+stop
+@enduml

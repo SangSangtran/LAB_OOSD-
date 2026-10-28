@@ -1,0 +1,188 @@
+@startuml ClassDiagram_QuanLyNhanSu
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam roundcorner 10
+skinparam class {
+    BackgroundColor #F8F9FA
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+
+class NhanVien {
+    - maNV : String <<ID/PK>>
+    - hoTen : String
+    - ngaySinh : Date
+    - gioiTinh : String
+    - diaChi : String
+    - soDienThoai : String
+    - maPB : String <<FK>>
+    - maChucVu : String <<FK>>
+    - loaiNhanVien : String
+    - trangThai : String
+    + tiepNhanVaoLam() : void
+    + capNhatThongTin() : bool
+    + xemBangLuong() : BangLuong
+    + kyHopDong() : void
+}
+
+class PhongBan {
+    - maPB : String <<ID/PK>>
+    - tenPB : String
+    - truongPhong : String
+    - diaDiem : String
+    + lapKeHoachPhanCong() : void
+    + lapKeHoachPhuTroi() : void
+    + deXuatKhenThuong() : void
+}
+
+class QuyetDinhTuyenDung {
+    - soQDTuyenDung : String <<ID/PK>>
+    - maNV : String <<FK>>
+    - maPB : String <<FK>>
+    - ngayKy : Date
+    - thoiGianThuViec : int
+    - luongThuViec : double
+    - dieuKhoanHaiBen : String
+    + lapQuyetDinh() : void
+    + pheDuyet() : bool
+    + danhGiaThuViec() : String
+}
+
+class HopDongLaoDong {
+    - soHopDong : String <<ID/PK>>
+    - maNV : String <<FK>>
+    - ngayKy : Date
+    - loaiHopDong : String
+    - ngayHieuLuc : Date
+    - ngayHetHan : Date
+    - mucLuongThoaThuan : double
+    - coBaoHiem : bool
+    + kyHopDong() : void
+    + giaHanHopDong() : bool
+    + thanhLyHopDong() : void
+}
+
+class HoSoBaoHiem {
+    - maHoSoBH : String <<ID/PK>>
+    - maNV : String <<FK>>
+    - maSoBHXH : String
+    - maSoBHYT : String
+    - ngayThamGia : Date
+    - mucDongBH : double
+    - tyLeTrichTru : double
+    + lapHoSoBH() : void
+    + tinhTienTrichTruBH() : double
+}
+
+class QuyetDinhChucVu {
+    - soQDChucVu : String <<ID/PK>>
+    - maNV : String <<FK>>
+    - chucVu : String
+    - ngayKy : Date
+    - ngayHieuLuc : Date
+    - phuCapChucVu : double
+    - lyDo : String
+    + lapQuyetDinh() : void
+    + apDungChucVu() : void
+}
+
+class QuyetDinhLuong {
+    - soQDLuong : String <<ID/PK>>
+    - maNV : String <<FK>>
+    - ngayKy : Date
+    - ngayHieuLuc : Date
+    - luongCoBan : double
+    - phuCapLuong : double
+    - phuCapDocHai : double
+    - lyDoTangLuong : String
+    + lapQuyetDinh() : void
+    + dieuChinhLuong() : void
+}
+
+class PhieuChamCong {
+    - maChamCong : String <<ID/PK>>
+    - thangNam : String
+    - maNV : String <<FK>>
+    - soNgayLamViec : float
+    - soNgayNghiCoPhep : float
+    - soNgayNghiKhongPhep : float
+    - nguoiChamCong : String
+    + ghiNhanCong() : void
+    + tongHopNgayCong() : float
+}
+
+class PhieuPhuTroi {
+    - soPhieuPhuTroi : String <<ID/PK>>
+    - ngayPhuTroi : Date
+    - hinhThucPhuTroi : String
+    - heSoPhuTroi : float
+    - maPB : String <<FK>>
+    - nguoiLap : String
+    + lapPhieu() : void
+    + xacNhanPhuTroi() : bool
+}
+
+class ChiTietPhuTroi {
+    - maChiTiet : String <<ID/PK>>
+    - soPhieuPhuTroi : String <<FK>>
+    - maNV : String <<FK>>
+    - soGioPhuTroi : float
+    - ghiChu : String
+    + tinhGioQuyDoi() : float
+}
+
+class BangLuong {
+    - maBangLuong : String <<ID/PK>>
+    - thangNam : String
+    - maNV : String <<FK>>
+    - luongChinh : double
+    - tongPhuCap : double
+    - tienLuongPhuTroi : double
+    - tienKhenThuong : double
+    - tienKyLuatKhauTru : double
+    - tienBHXH_BHYT : double
+    - thucLanh : double
+    + tinhLuong() : double
+    + inPhieuLuong() : void
+    + xacNhanChiTra() : void
+}
+
+class QuyetDinhKhenThuong {
+    - soQDKhenThuong : String <<ID/PK>>
+    - ngayKy : Date
+    - doiTuongKhenThuong : String
+    - maDoiTuong : String
+    - loaiKhenThuong : String
+    - soTienThuong : double
+    - noiDung : String
+    - nguoiKy : String
+    + lapQuyetDinh() : void
+    + xuatPhieuChiThuong() : void
+}
+
+class QuyetDinhKyLuat {
+    - soQDKyLuat : String <<ID/PK>>
+    - ngayKy : Date
+    - doiTuongKyLuat : String
+    - maDoiTuong : String
+    - hinhThucKyLuat : String
+    - soTienPhat : double
+    - noiDung : String
+    + lapQuyetDinh() : void
+    + truLuongHoacPhat() : void
+}
+
+PhongBan "1" -- "0..*" NhanVien : gồm có >
+NhanVien "1" -- "0..1" QuyetDinhTuyenDung : nhận >
+NhanVien "1" -- "0..*" HopDongLaoDong : ký kết >
+HopDongLaoDong "1" -- "0..1" HoSoBaoHiem : thiết lập >
+NhanVien "1" -- "0..*" QuyetDinhChucVu : bổ nhiệm >
+NhanVien "1" -- "0..*" QuyetDinhLuong : nâng lương >
+NhanVien "1" -- "0..*" PhieuChamCong : được chấm >
+PhieuPhuTroi "1" *-- "1..*" ChiTietPhuTroi : gồm có >
+NhanVien "1" -- "0..*" ChiTietPhuTroi : tham gia >
+NhanVien "1" -- "0..*" BangLuong : nhận hàng tháng >
+NhanVien "1" -- "0..*" QuyetDinhKhenThuong : được thưởng >
+PhongBan "1" -- "0..*" QuyetDinhKhenThuong : được thưởng >
+NhanVien "1" -- "0..*" QuyetDinhKyLuat : bị xử lý >
+@enduml

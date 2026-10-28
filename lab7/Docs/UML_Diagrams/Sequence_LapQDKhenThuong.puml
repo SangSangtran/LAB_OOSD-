@@ -1,0 +1,69 @@
+@startuml Sequence_LapQDKhenThuong
+actor "Trưởng phòng / HR" as User
+boundary "frmLapQDKhenThuong" as UI
+control "KhenThuongController" as Ctrl
+entity "NhanVienService" as NVService
+entity "QuyetDinhKhenThuong" as QD
+database "NhanSuDB" as DB
+actor "Giám đốc" as GD
+entity "KeToanLuongService" as KTService
+
+autonumber
+User -> UI : 1. moFormLapQDKhenThuong()
+activate UI
+UI -> Ctrl : 2. layDanhSachDoiTuongVaLoaiThuong()
+activate Ctrl
+Ctrl -> DB : 3. queryDanhSachPhongBanVaNhanVien()
+activate DB
+DB --> Ctrl : 4. danhSachDoiTuong
+deactivate DB
+Ctrl --> UI : 5. hienThiLenForm()
+deactivate Ctrl
+
+User -> UI : 6. chonDoiTuong(loai: CaNhan/TapThe, maDoiTuong)
+UI -> Ctrl : 7. kiemTraThongTinDoiTuong(maDoiTuong)
+activate Ctrl
+Ctrl -> NVService : 8. getThongTin(maDoiTuong)
+activate NVService
+NVService --> Ctrl : 9. thongTinHopLe (ten, chucVu, phongBan)
+deactivate NVService
+Ctrl --> UI : 10. hienThiThongTinChiTiet()
+deactivate Ctrl
+
+User -> UI : 11. nhapThongTinThuong(loaiKhenThuong, soTien, noiDung)
+User -> UI : 12. nhanLuuVaTrinhKy()
+UI -> Ctrl : 13. xuLyLapQDKhenThuong(thongTinThuong)
+activate Ctrl
+Ctrl -> Ctrl : 14. validateSoTienVaDieuKien(soTien > 0)
+Ctrl -> QD : 15. create(soQDKT, ngayKy, doiTuong, soTien, noiDung, trangThai="ChoDuyet")
+activate QD
+QD --> Ctrl : 16. qdObj
+deactivate QD
+Ctrl -> DB : 17. saveQuyetDinh(qdObj)
+activate DB
+DB --> Ctrl : 18. saveSuccess(soQDKT)
+deactivate DB
+Ctrl --> UI : 19. thongBaoDaTrinhKy()
+deactivate Ctrl
+
+GD -> UI : 20. xemVaPheDuyetQuyetDinh(soQDKT)
+UI -> Ctrl : 21. pheDuyet(soQDKT)
+activate Ctrl
+Ctrl -> QD : 22. setTrangThai("DaDuyet", nguoiKy="GiamDoc")
+Ctrl -> DB : 23. updateTrangThai(soQDKT)
+activate DB
+DB --> Ctrl : 24. updateSuccess
+deactivate DB
+
+Ctrl -> KTService : 25. chuyenSangKeToanChiTra(soQDKT, soTien, hinhThucChi)
+activate KTService
+KTService --> Ctrl : 26. ghiNhanThanhCong (vao BangLuong hoac PhieuChi)
+deactivate KTService
+
+Ctrl --> UI : 27. thongBaoPheDuyetVaChiThuongThanhCong()
+deactivate Ctrl
+UI -> UI : 28. inQuyetDinhKhenThuong()
+UI --> User : 29. xuatFileQuyetDinhVaHoanTat()
+deactivate UI
+
+@enduml

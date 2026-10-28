@@ -1,0 +1,46 @@
+@startuml UseCase_TongQuat_NhanSu
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Nhân viên" as NV
+actor "Phòng Nhân sự" as HR
+actor "Trưởng phòng / Phân xưởng" as TP
+actor "Ban Chấm công" as BCC
+actor "Kế toán tiền lương" as KT
+actor "Giám đốc" as GD
+
+rectangle "HỆ THỐNG QUẢN LÝ NHÂN SỰ - CÔNG TY SƠN ĐÔNG Á" {
+    usecase "Quản lý tuyển dụng & thử việc" as UC1
+    usecase "Ký hợp đồng lao động & bảo hiểm" as UC2
+    usecase "Quản lý quyết định chức vụ & lương" as UC3
+    usecase "Phân công công việc & chấm công" as UC4
+    usecase "Ghi nhận giờ phụ trội (tăng ca)" as UC5
+    usecase "Tính toán và chi trả bảng lương" as UC6
+    usecase "Quản lý quyết định khen thưởng & kỷ luật" as UC7
+}
+
+NV --> UC4
+NV --> UC6
+
+HR --> UC1
+HR --> UC2
+HR --> UC3
+HR --> UC7
+
+TP --> UC1
+TP --> UC4
+TP --> UC5
+TP --> UC7
+
+BCC --> UC4
+BCC --> UC5
+
+KT --> UC6
+KT --> UC7
+
+GD --> UC1
+GD --> UC2
+GD --> UC3
+GD --> UC7
+@enduml
