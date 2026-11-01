@@ -1,0 +1,52 @@
+@startuml UseCase_ChiTiet_MuaHang_GiaoHang
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Khách hàng" as KH
+actor "Khách quen" as KQ
+actor "Khách vãng lai" as KVL
+actor "Nhân viên bán hàng" as NVBH
+actor "Nhân viên kho" as NVK
+
+KQ --|> KH
+KVL --|> KH
+
+rectangle "PHÂN RÃ QUY TRÌNH: TỪ ĐẶT MUA ĐẾN GIAO ĐẦY ĐỦ NƯỚC GIẢI KHÁT" {
+    usecase "Yêu cầu mua nước giải khát" as UC_YeuCau
+    usecase "Kiểm tra số lượng tồn kho" as UC_KiemTraKho
+    usecase "Giao hàng ngay tại cửa hàng" as UC_GiaoNgay
+    usecase "Lập Phiếu hẹn giao nhiều đợt" as UC_LapPhieuHen
+    usecase "Giao hàng các đợt tiếp theo" as UC_GiaoDotTiep
+    usecase "Lập Hóa đơn tính tiền" as UC_LapHD
+    usecase "Thanh toán ngay toàn bộ" as UC_TTNgay
+    usecase "Lập Phiếu ghi nợ trả chậm" as UC_GhiNo
+    usecase "Hoàn tất giao đủ số lượng NGK" as UC_HoanTat
+}
+
+KH --> UC_YeuCau
+NVBH --> UC_YeuCau
+
+UC_YeuCau ..> UC_KiemTraKho : <<include>>
+NVK --> UC_KiemTraKho
+
+UC_KiemTraKho <.. UC_GiaoNgay : <<extend>>\n(kho đủ hàng)
+UC_KiemTraKho <.. UC_LapPhieuHen : <<extend>>\n(kho thiếu & khách quen)
+
+KQ --> UC_LapPhieuHen
+NVBH --> UC_LapPhieuHen
+UC_LapPhieuHen ..> UC_GiaoDotTiep : <<trigger>>
+NVBH --> UC_GiaoDotTiep
+
+UC_YeuCau ..> UC_LapHD : <<include>>
+NVBH --> UC_LapHD
+
+UC_LapHD <.. UC_TTNgay : <<extend>>\n(khách vãng lai/trả ngay)
+UC_LapHD <.. UC_GhiNo : <<extend>>\n(khách quen trả chậm)
+
+KVL --> UC_TTNgay
+KQ --> UC_GhiNo
+NVBH --> UC_GhiNo
+
+UC_GiaoNgay ..> UC_HoanTat : <<flow>>
+UC_GiaoDotTiep ..> UC_HoanTat : <<flow>>
+@enduml

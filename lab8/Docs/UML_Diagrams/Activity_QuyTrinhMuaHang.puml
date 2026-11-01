@@ -1,0 +1,69 @@
+@startuml Activity_QuyTrinhMuaHang_GiaoHang
+|#E3F2FD|Khách hàng|
+|#FFF9C4|Nhân viên bán hàng|
+|#E8F5E9|Nhân viên kho|
+
+|Khách hàng|
+start
+:Đến cửa hàng & yêu cầu mua NGK;
+
+|Nhân viên bán hàng|
+:Tiếp nhận danh sách mặt hàng và số lượng;
+:Yêu cầu kiểm tra tồn kho;
+
+|Nhân viên kho|
+:Kiểm tra số lượng tồn kho của các mặt hàng;
+if (Số lượng trong kho có đủ không?) then (Đủ hàng)
+    :Xác nhận có đủ hàng;
+    
+    |Nhân viên bán hàng|
+    :Lấy hàng từ kho;
+    :Lập Hóa đơn tính tiền;
+    
+    |Khách hàng|
+    :Nhận hàng ngay tại quầy;
+else (Thiếu hàng)
+    :Báo số lượng còn thiếu;
+    
+    |Nhân viên bán hàng|
+    if (Khách hàng có phải là Khách quen?) then (Là khách quen)
+        :Thỏa thuận ngày hẹn giao hàng các đợt tiếp theo;
+        :Lập Hóa đơn và Lập Phiếu hẹn giao nhiều đợt;
+        :Giao số lượng hàng hiện có tại cửa hàng;
+        
+        |Khách hàng|
+        :Nhận phần hàng có sẵn và giữ Phiếu hẹn;
+    else (Khách vãng lai)
+        :Thông báo hết hàng / Giao tối đa số lượng có sẵn;
+        :Lập Hóa đơn cho số lượng thực nhận;
+        
+        |Khách hàng|
+        :Nhận số hàng thực có;
+    endif
+endif
+
+|Nhân viên bán hàng|
+if (Hình thức thanh toán?) then (Trả chậm (chỉ áp dụng Khách quen))
+    :Lập Phiếu ghi nợ (ghi rõ ngày hẹn trả, số tiền, lý do);
+    |Khách hàng|
+    :Ký xác nhận Phiếu ghi nợ;
+else (Thanh toán ngay)
+    |Khách hàng|
+    :Thanh toán tiền mặt/chuyển khoản toàn bộ;
+    |Nhân viên bán hàng|
+    :Xác nhận đã thanh toán trên Hóa đơn;
+endif
+
+|Nhân viên bán hàng|
+if (Có phiếu hẹn giao hàng không?) then (Có phiếu hẹn)
+    :Theo dõi nhập hàng từ Nhà cung ứng;
+    :Giao hàng bổ sung theo Phiếu hẹn (tối đa các đợt hẹn);
+    |Khách hàng|
+    :Ký nhận đủ hàng theo Phiếu hẹn;
+else (Không có hẹn)
+endif
+
+|Khách hàng|
+:Đã nhận đầy đủ toàn bộ nước giải khát theo yêu cầu;
+stop
+@enduml

@@ -1,0 +1,46 @@
+@startuml UseCase_TongQuat_CuaHangNGK
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Khách hàng" as KH
+actor "Khách quen" as KQ
+actor "Khách vãng lai" as KVL
+actor "Nhân viên bán hàng" as NVBH
+actor "Nhân viên kho" as NVK
+actor "Nhà cung ứng" as NCU
+actor "Chủ cửa hàng" as QL
+
+KQ --|> KH
+KVL --|> KH
+
+rectangle "HỆ THỐNG QUẢN LÝ CỬA HÀNG NƯỚC GIẢI KHÁT" {
+    usecase "UC1: Quản lý danh mục Nước giải khát & Nhà cung ứng" as UC1
+    usecase "UC2: Lập và gửi Đơn đặt hàng đến Nhà cung ứng" as UC2
+    usecase "UC3: Tiếp nhận Phiếu giao hàng & Nhập kho (tối đa 3 đợt)" as UC3
+    usecase "UC4: Bán hàng và Lập Hóa đơn tính tiền" as UC4
+    usecase "UC5: Lập Phiếu hẹn giao hàng nhiều đợt" as UC5
+    usecase "UC6: Quản lý trả chậm và Lập Phiếu ghi nợ" as UC6
+    usecase "UC7: Tra cứu và Thống kê báo cáo (Kho, Doanh thu, Công nợ)" as UC7
+}
+
+NVBH --> UC4
+NVBH --> UC5
+NVBH --> UC6
+NVBH --> UC7
+
+KH --> UC4
+KQ --> UC5
+KQ --> UC6
+
+NVK --> UC1
+NVK --> UC2
+NVK --> UC3
+NVK --> UC7
+
+NCU --> UC2
+NCU --> UC3
+
+QL --> UC1
+QL --> UC7
+@enduml
