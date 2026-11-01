@@ -1,0 +1,143 @@
+@startuml ClassDiagram_QuanLyBenhAn
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam roundcorner 10
+skinparam class {
+    BackgroundColor #F8F9FA
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+
+class BenhNhan {
+    - maBN : String <<ID/PK>>
+    - hoTen : String
+    - ngaySinh : Date
+    - diaChi : String
+    - soDienThoai : String
+    - anh3x4 : byte[]
+    + dangKyKham() : void
+    + capNhatThongTin() : boolean
+    + traCuuHoSo() : HoSoBenhAn
+    + datLichHenKhamDinhKy() : LichHen
+}
+
+class PhieuDangKy {
+    - maPhieuDK : String <<ID/PK>>
+    - ngayDangKy : Date
+    - lePhiDangKy : double
+    - trangThaiThanhToan : boolean
+    + lapPhieu() : void
+    + xacNhanThanhToan() : boolean
+}
+
+class HoSoBenhAn {
+    - maHoSo : String <<ID/PK>>
+    - maBN : String <<FK>>
+    - ngayCap : Date
+    - lePhiHangNam : double
+    - hanSuDung : Date
+    - trangThai : String
+    + taoMoiHoSo() : void
+    + giaHanHoSo() : boolean
+    + themPhieuKham(pk : PhieuKhamBenh) : void
+    + xemLichSuKham() : List<PhieuKhamBenh>
+}
+
+class BacSi {
+    - maBS : String <<ID/PK>>
+    - hoTen : String
+    - chuyenKhoa : String
+    - soDienThoai : String
+    + khamBenh(bn : BenhNhan) : PhieuKhamBenh
+    + chiDinhXetNghiem() : PhieuXetNghiem
+    + lapToaThuoc() : ToaThuoc
+    + traCuuLichSuBenhAn() : HoSoBenhAn
+}
+
+class KhoaDieuTri {
+    - maKhoa : String <<ID/PK>>
+    - tenKhoa : String
+    - truongKhoa : String
+    + tiepNhanBenhNhan() : void
+}
+
+class PhieuKhamBenh {
+    - maPhieuKham : String <<ID/PK>>
+    - ngayGioKham : DateTime
+    - maHoSo : String <<FK>>
+    - maBS : String <<FK>>
+    - maKhoa : String <<FK>>
+    - trieuChung : String
+    - thanNhiet : float
+    - huyetAp : String
+    - chanDoan : String
+    - loaiKham : String
+    - trangThai : String
+    + ghiNhanTrieuChung() : void
+    + capNhatChanDoan() : void
+    + tinhChiPhi() : double
+}
+
+class PhieuXetNghiem {
+    - maPhieuXN : String <<ID/PK>>
+    - maPhieuKham : String <<FK>>
+    - tenXetNghiem : String
+    - ngayGioXN : DateTime
+    - ketQua : String
+    - chiPhi : double
+    + nhapKetQua() : void
+    + inKetQua() : void
+}
+
+class ToaThuoc {
+    - maToaThuoc : String <<ID/PK>>
+    - maPhieuKham : String <<FK>>
+    - ngayKeToa : Date
+    - loiDan : String
+    - bacSiKeToa : String
+    + themChiTiet() : void
+    + inToaThuoc() : void
+}
+
+class ChiTietToaThuoc {
+    - maChiTiet : String <<ID/PK>>
+    - maToaThuoc : String <<FK>>
+    - maThuoc : String
+    - tenThuoc : String
+    - soLuong : int
+    - donViTinh : String
+    - lieuDung : String
+    - cachDung : String
+    + tinhThanhTien() : double
+}
+
+class LichHen {
+    - maLichHen : String <<ID/PK>>
+    - maHoSo : String <<FK>>
+    - ngayGioHen : DateTime
+    - trangThai : String
+    + datLich() : boolean
+    + huyLich() : boolean
+}
+
+class HoaDonVienPhi {
+    - maHoaDon : String <<ID/PK>>
+    - maBN : String <<FK>>
+    - ngayThanhToan : DateTime
+    - tongTien : double
+    - loaiThanhToan : String
+    + inHoaDon() : void
+}
+
+BenhNhan "1" -- "1" PhieuDangKy : lập >
+BenhNhan "1" -- "1" HoSoBenhAn : sở hữu >
+BenhNhan "1" -- "0..*" HoaDonVienPhi : thanh toán >
+HoSoBenhAn "1" *-- "0..*" PhieuKhamBenh : chứa các trang >
+HoSoBenhAn "1" -- "0..*" LichHen : đăng ký >
+BacSi "1" -- "0..*" PhieuKhamBenh : phụ trách >
+KhoaDieuTri "1" -- "0..*" PhieuKhamBenh : tiếp nhận >
+KhoaDieuTri "1" -- "0..*" BacSi : trực thuộc >
+PhieuKhamBenh "1" o-- "0..*" PhieuXetNghiem : chỉ định >
+PhieuKhamBenh "1" -- "0..1" ToaThuoc : kê toa >
+ToaThuoc "1" *-- "1..*" ChiTietToaThuoc : gồm có >
+@enduml

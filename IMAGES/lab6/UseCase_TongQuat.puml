@@ -1,0 +1,39 @@
+@startuml UseCase_TongQuat
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Bệnh nhân" as BN
+actor "Bác sĩ" as BS
+actor "Nhân viên Tiếp nhận / CSKH" as NV
+actor "Kỹ thuật viên Xét nghiệm" as KTV
+actor "Thu ngân" as TN
+
+rectangle "HỆ THỐNG QUẢN LÝ HỒ SƠ BỆNH ÁN" {
+    usecase "Đăng ký khám & Cấp hồ sơ bệnh án" as UC1
+    usecase "Đặt lịch hẹn khám định kỳ" as UC2
+    usecase "Tra cứu hồ sơ bệnh án" as UC3
+    usecase "Khám bệnh & Ghi nhận triệu chứng" as UC4
+    usecase "Chỉ định & Nhập kết quả xét nghiệm" as UC5
+    usecase "Lập toa thuốc điều trị" as UC6
+    usecase "Thanh toán viện phí & Ghi nhận xuất viện" as UC7
+}
+
+BN --> UC1
+BN --> UC2
+BN --> UC7
+
+NV --> UC1
+NV --> UC2
+NV --> UC3
+NV --> UC7
+
+BS --> UC3
+BS --> UC4
+BS --> UC5
+BS --> UC6
+
+KTV --> UC5
+
+TN --> UC7
+@enduml

@@ -1,0 +1,50 @@
+@startuml UseCase_ChiTiet_ThuViec_HopDong
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Ứng viên / Nhân viên" as NV
+actor "Phòng Nhân sự" as HR
+actor "Trưởng phòng ban" as TP
+actor "Giám đốc" as GD
+
+rectangle "PHÂN RÃ QUY TRÌNH: TỪ THỬ VIỆC ĐẾN KÝ HỢP ĐỒNG CHÍNH THỨC" {
+    usecase "Tiếp nhận nhân viên vào thử việc" as UC_TiepNhan
+    usecase "Lập Quyết định tuyển dụng & thử việc" as UC_LapQDTuyenDung
+    usecase "Phân công & hướng dẫn thử việc tại phòng ban" as UC_HuongDan
+    usecase "Đánh giá kết quả hết thời gian thử việc" as UC_DanhGia
+    usecase "Chấm dứt thử việc (không đạt)" as UC_ChamDut
+    usecase "Ký Hợp đồng lao động chính thức" as UC_KyHD
+    usecase "Ký Hợp đồng ngắn hạn" as UC_HDNganHan
+    usecase "Ký Hợp đồng dài hạn" as UC_HDDaiHan
+    usecase "Lập hồ sơ BHYT và BHXH" as UC_LapHoSoBH
+    usecase "Ban hành Quyết định chức vụ & phụ cấp" as UC_BanHanhChucVu
+    usecase "Ban hành Quyết định lương & phụ cấp độc hại" as UC_BanHanhLuong
+}
+
+NV --> UC_TiepNhan
+HR --> UC_TiepNhan
+UC_TiepNhan ..> UC_LapQDTuyenDung : <<include>>
+GD --> UC_LapQDTuyenDung
+
+TP --> UC_HuongDan
+NV --> UC_HuongDan
+
+TP --> UC_DanhGia
+HR --> UC_DanhGia
+
+UC_DanhGia <.. UC_ChamDut : <<extend>>\n(không đạt)
+UC_DanhGia <.. UC_KyHD : <<extend>>\n(đạt yêu cầu)
+
+NV --> UC_KyHD
+HR --> UC_KyHD
+GD --> UC_KyHD
+
+UC_KyHD <.. UC_HDNganHan : <<extend>>
+UC_KyHD <.. UC_HDDaiHan : <<extend>>
+UC_HDDaiHan ..> UC_LapHoSoBH : <<include>>
+
+UC_KyHD ..> UC_BanHanhChucVu : <<include>>
+UC_KyHD ..> UC_BanHanhLuong : <<include>>
+GD --> UC_BanHanhChucVu
+GD --> UC_BanHanhLuong
+@enduml

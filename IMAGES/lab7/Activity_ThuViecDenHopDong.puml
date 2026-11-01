@@ -1,0 +1,50 @@
+@startuml Activity_ThuViecDenHopDong
+|#E3F2FD|Ứng viên / Nhân viên|
+|#FEFCBF|Phòng Nhân sự (HR)|
+|#E8F5E9|Trưởng phòng ban tiếp nhận|
+|#F3E5F5|Giám đốc|
+
+|Phòng Nhân sự (HR)|
+start
+:Soạn thảo Quyết định tuyển dụng thử việc;
+:Ghi rõ phòng ban, thời gian, mức lương thử việc & điều khoản;
+
+|Giám đốc|
+:Ký duyệt Quyết định tuyển dụng;
+
+|Ứng viên / Nhân viên|
+:Nhận quyết định & bắt đầu thử việc;
+
+|Trưởng phòng ban tiếp nhận|
+:Tiếp nhận nhân viên về phòng ban/phân xưởng;
+:Lập kế hoạch phân công ca làm việc & hướng dẫn công việc;
+:Theo dõi quá trình làm việc trong thời gian thử việc;
+:Lập biên bản đánh giá kết quả hết thời gian thử việc;
+
+|Phòng Nhân sự (HR)|
+:Tổng hợp kết quả đánh giá thử việc;
+if (Đạt yêu cầu thử việc?) then (Không đạt)
+    :Thông báo chấm dứt thử việc;
+    |Ứng viên / Nhân viên|
+    :Làm thủ tục thanh lý thử việc & rời công ty;
+    stop
+else (Đạt yêu cầu)
+    |Phòng Nhân sự (HR)|
+    :Soạn thảo Hợp đồng lao động chính thức;
+    if (Loại hợp đồng?) then (Dài hạn)
+        :Lập hồ sơ tham gia BHYT và BHXH;
+    else (Ngắn hạn)
+    endif
+    :Soạn thảo Quyết định chức vụ & phụ cấp chức vụ;
+    :Soạn thảo Quyết định lương & phụ cấp độc hại;
+endif
+
+|Giám đốc|
+:Ký Hợp đồng lao động chính thức;
+:Ký Quyết định chức vụ & Quyết định lương;
+
+|Ứng viên / Nhân viên|
+:Ký Hợp đồng lao động & nhận các quyết định kèm theo;
+:Chính thức trở thành nhân viên công ty sơn Đông Á;
+stop
+@enduml

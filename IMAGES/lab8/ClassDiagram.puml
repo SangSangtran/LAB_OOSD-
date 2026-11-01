@@ -1,0 +1,171 @@
+@startuml ClassDiagram_CuaHangNGK
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam roundcorner 10
+skinparam class {
+    BackgroundColor #F8F9FA
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+
+class NhanHieu {
+    - maLoai : String <<ID/PK>>
+    - tenLoai : String
+    - xuatXu : String
+    + themLoai() : void
+    + capNhatLoai() : bool
+}
+
+class NuocGiaiKhat {
+    - maNGK : String <<ID/PK>>
+    - tenNGK : String
+    - donViTinh : String
+    - donGiaBan : double
+    - soLuongTon : int
+    - maLoai : String <<FK>>
+    - maNCU : String <<FK>>
+    + capNhatTonKho(sl : int) : void
+    + kiemTraTonKho(slYeuCau : int) : bool
+}
+
+class NhaCungUng {
+    - maNCU : String <<ID/PK>>
+    - tenNCU : String
+    - diaChi : String
+    - soDienThoai : String
+    + themNCU() : void
+    + capNhatNCU() : bool
+}
+
+class DonDatHang {
+    - soDDH : String <<ID/PK>>
+    - ngayDat : Date
+    - ngayNhanDuKien : Date
+    - maNCU : String <<FK>>
+    - maNV : String <<FK>>
+    - soLanDaGiao : int
+    - tongTienDat : double
+    - trangThai : String
+    + lapDonDatHang() : void
+    + kiemTraSoLanGiao() : bool
+    + capNhatTrangThai() : void
+}
+
+class ChiTietDDH {
+    - maCTDDH : String <<ID/PK>>
+    - soDDH : String <<FK>>
+    - maNGK : String <<FK>>
+    - soLuongDat : int
+    - donGiaDat : double
+    + tinhThanhTien() : double
+}
+
+class PhieuGiaoHang {
+    - soPGH : String <<ID/PK>>
+    - soDDH : String <<FK>>
+    - lanGiao : int
+    - ngayGiao : Date
+    - tongTienGiao : double
+    - nguoiGiao : String
+    + lapPhieuGiao() : void
+    + xacNhanNhapKho() : void
+}
+
+class ChiTietGiaoHang {
+    - maCTGH : String <<ID/PK>>
+    - soPGH : String <<FK>>
+    - maNGK : String <<FK>>
+    - soLuongGiao : int
+    - donGiaGiao : double
+    + tinhThanhTien() : double
+}
+
+class KhachHang {
+    - maKH : String <<ID/PK>>
+    - tenKH : String
+    - diaChi : String
+    - soDienThoai : String
+    - loaiKhachHang : String
+    + themKhachHang() : void
+    + capNhatThongTin() : bool
+    + kiemTraKhachQuen() : bool
+}
+
+class NhanVien {
+    - maNV : String <<ID/PK>>
+    - hoTen : String
+    - soDienThoai : String
+    - chucVu : String
+    + lapHoaDon() : HoaDon
+    + lapPhieuHen() : PhieuHen
+    + lapPhieuGhiNo() : PhieuGhiNo
+}
+
+class HoaDon {
+    - soHD : String <<ID/PK>>
+    - ngayLap : Date
+    - maKH : String <<FK>>
+    - maNV : String <<FK>>
+    - tongTien : double
+    - hinhThucTT : String
+    - trangThaiGiao : String
+    + lapHoaDon() : void
+    + tinhTongTien() : double
+    + inHoaDon() : void
+}
+
+class ChiTietHoaDon {
+    - maCTHD : String <<ID/PK>>
+    - soHD : String <<FK>>
+    - maNGK : String <<FK>>
+    - soLuong : int
+    - donGiaBan : double
+    + tinhThanhTien() : double
+}
+
+class PhieuHen {
+    - soPhieuHen : String <<ID/PK>>
+    - soHD : String <<FK>>
+    - ngayLapHen : Date
+    - ngayHenGiao : Date
+    - soLuongConThieu : int
+    - dotGiao : int
+    - trangThai : String
+    + taoPhieuHen() : void
+    + xacNhanDaGiao() : void
+}
+
+class PhieuGhiNo {
+    - soPhieuNo : String <<ID/PK>>
+    - soHD : String <<FK>>
+    - maKH : String <<FK>>
+    - maNVLap : String <<FK>>
+    - ngayLap : Date
+    - soTienNo : double
+    - ngayDuKienTra : Date
+    - lyDoNo : String
+    - trangThai : String
+    + lapPhieuGhiNo() : void
+    + thanhToanNo() : void
+}
+
+NhanHieu "1" -- "1..*" NuocGiaiKhat : phân loại >
+NhaCungUng "1" -- "1..*" NuocGiaiKhat : cung cấp độc quyền >
+NhaCungUng "1" -- "0..*" DonDatHang : nhận đặt >
+DonDatHang "1" *-- "1..*" ChiTietDDH : gồm các món >
+DonDatHang "1" -- "1..3" PhieuGiaoHang : giao tối đa 3 đợt >
+PhieuGiaoHang "1" *-- "1..*" ChiTietGiaoHang : chi tiết hàng giao >
+NuocGiaiKhat "1" -- "0..*" ChiTietDDH : được đặt >
+NuocGiaiKhat "1" -- "0..*" ChiTietGiaoHang : được giao >
+
+KhachHang "1" -- "0..*" HoaDon : mua hàng >
+NhanVien "1" -- "0..*" HoaDon : phục vụ bán >
+NhanVien "1" -- "0..*" DonDatHang : lập đơn đặt >
+HoaDon "1" *-- "1..*" ChiTietHoaDon : gồm các dòng >
+NuocGiaiKhat "1" -- "0..*" ChiTietHoaDon : bán >
+
+HoaDon "1" -- "0..*" PhieuHen : hẹn giao nhiều đợt >
+HoaDon "1" -- "0..1" PhieuGhiNo : trả chậm theo >
+KhachHang "1" -- "0..*" PhieuGhiNo : nợ tiền >
+NhanVien "1" -- "0..*" PhieuGhiNo : lập phiếu >
+@enduml

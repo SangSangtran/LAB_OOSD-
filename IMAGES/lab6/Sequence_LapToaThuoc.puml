@@ -1,0 +1,63 @@
+@startuml Sequence_LapToaThuoc
+actor "Bác sĩ" as BS
+boundary "frmLapToaThuoc" as UI
+control "ToaThuocController" as Ctrl
+entity "HoSoBenhAnService" as HSService
+entity "ChiTietToaThuoc" as CT
+entity "ToaThuoc" as TT
+database "KhoThuocDB" as DB
+
+autonumber
+BS -> UI : 1. moFormLapToa(maPhieuKham)
+activate UI
+UI -> Ctrl : 2. layThongTinKham(maPhieuKham)
+activate Ctrl
+Ctrl -> HSService : 3. getChiTietPhieuKham(maPhieuKham)
+activate HSService
+HSService --> Ctrl : 4. thongTinKham (chanDoan, tienSuDiUng)
+deactivate HSService
+Ctrl --> UI : 5. hienThiThongTinBenhNhan()
+deactivate Ctrl
+
+BS -> UI : 6. timKiemThuoc(tuKhoa)
+UI -> Ctrl : 7. traCuuThuoc(tuKhoa)
+activate Ctrl
+Ctrl -> DB : 8. queryDanhMucThuoc(tuKhoa)
+activate DB
+DB --> Ctrl : 9. danhSachThuoc
+deactivate DB
+Ctrl --> UI : 10. hienThiKetQuaTimKiem()
+deactivate Ctrl
+
+loop Thêm thuốc vào toa
+    BS -> UI : 11. chonThuoc(maThuoc, soLuong, lieuDung, cachDung)
+    UI -> Ctrl : 12. themThuoc(thongTinThuoc)
+    activate Ctrl
+    Ctrl -> Ctrl : 13. kiemTraTuongTacVaDiUng(tienSuDiUng, maThuoc)
+    Ctrl -> CT : 14. create(maThuoc, soLuong, lieuDung, cachDung)
+    activate CT
+    CT --> Ctrl : 15. chiTietObj
+    deactivate CT
+    Ctrl --> UI : 16. capNhatDanhSachKetoa()
+    deactivate Ctrl
+end
+
+BS -> UI : 17. nhapLoiDanVaXacNhan(loiDan)
+UI -> Ctrl : 18. xacNhanLuuToaThuoc()
+activate Ctrl
+Ctrl -> TT : 19. create(maPhieuKham, ngayKeToa, loiDan, listChiTiet)
+activate TT
+TT --> Ctrl : 20. toaThuocObj
+deactivate TT
+Ctrl -> DB : 21. saveToaThuoc(toaThuocObj) & updateKho()
+activate DB
+DB --> Ctrl : 22. saveSuccess(maToaThuoc)
+deactivate DB
+Ctrl --> UI : 23. thongBaoKeToaThanhCong()
+deactivate Ctrl
+
+UI -> UI : 24. inToaThuoc()
+UI --> BS : 25. hienThiKetQuaInVaHoanTat()
+deactivate UI
+
+@enduml

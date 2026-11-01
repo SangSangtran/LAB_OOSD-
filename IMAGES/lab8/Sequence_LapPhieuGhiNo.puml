@@ -1,0 +1,58 @@
+@startuml Sequence_LapPhieuGhiNo
+actor "Nhân viên bán hàng" as NV
+boundary "frmLapPhieuGhiNo" as UI
+control "GhiNoController" as Ctrl
+entity "KhachHangService" as KHService
+entity "HoaDonService" as HDService
+entity "PhieuGhiNo" as PGN
+database "CuaHangNGK_DB" as DB
+actor "Khách quen" as KQ
+
+autonumber
+NV -> UI : 1. moFormLapPhieuGhiNo(soHD)
+activate UI
+UI -> Ctrl : 2. layThongTinHoaDonVaKhach(soHD)
+activate Ctrl
+Ctrl -> HDService : 3. getChiTietHoaDon(soHD)
+activate HDService
+HDService --> Ctrl : 4. thongTinHD (maKH, tongTien, ngayLap)
+deactivate HDService
+
+Ctrl -> KHService : 5. kiemTraLoaiKhachHang(maKH)
+activate KHService
+KHService --> Ctrl : 6. thongTinKhach (tenKH, loaiKH="KhachQuen", hanMucNo)
+deactivate KHService
+
+alt Không phải khách quen
+    Ctrl --> UI : 7. thongBaoKhongDuDieuKienGhiNo()
+else Là khách quen hợp lệ
+    Ctrl --> UI : 8. hienThiThongTinLenForm()
+end
+deactivate Ctrl
+
+NV -> UI : 9. nhapThongTinGhiNo(soTienNo, ngayDuKienTra, lyDoNo)
+NV -> UI : 10. nhanNutXacNhanLuu()
+UI -> Ctrl : 11. xuLyLapPhieuNo(maNV, soHD, maKH, soTienNo, ngayHenTra, lyDo)
+activate Ctrl
+Ctrl -> Ctrl : 12. validate(soTienNo <= tongTien, ngayHenTra > ngayHienTai)
+
+Ctrl -> PGN : 13. create(soPhieuNo, soHD, maKH, maNV, soTienNo, ngayHenTra, lyDo, "ChuaThanhToan")
+activate PGN
+PGN --> Ctrl : 14. phieuNoObj
+deactivate PGN
+
+Ctrl -> DB : 15. savePhieuGhiNo(phieuNoObj)
+activate DB
+Ctrl -> DB : 16. updateTrangThaiHoaDon(soHD, "TraCham_GhiNo")
+DB --> Ctrl : 17. saveSuccess(soPhieuNo)
+deactivate DB
+
+Ctrl --> UI : 18. thongBaoGhiNoThanhCong(soPhieuNo)
+deactivate Ctrl
+
+UI -> UI : 19. inPhieuGhiNo(phieuNoObj)
+UI --> NV : 20. xuatPhieuIn()
+NV -> KQ : 21. traoPhieuNoVaYeuCauKyXacNhan()
+KQ --> NV : 22. kyTenXacNhanVaLuuLienChungTu()
+deactivate UI
+@enduml

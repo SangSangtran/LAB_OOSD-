@@ -1,0 +1,47 @@
+@startuml UseCase_ChiTiet_KhamBenh
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Bệnh nhân" as BN
+actor "Nhân viên Tiếp nhận" as NV
+actor "Bác sĩ" as BS
+actor "KTV Xét nghiệm" as KTV
+
+rectangle "PHÂN RÃ QUY TRÌNH KHÁM BỆNH - XÉT NGHIỆM - TOA THUỐC" {
+    usecase "Đăng ký khám bệnh" as UC_DK
+    usecase "Mở hồ sơ bệnh án mới" as UC_MoHS
+    usecase "Tra cứu hồ sơ theo mã" as UC_TraCuuHS
+    usecase "Khám bệnh lâm sàng" as UC_Kham
+    usecase "Ghi nhận triệu chứng & sinh hiệu" as UC_GhiTrieuChung
+    usecase "Chỉ định xét nghiệm" as UC_ChiDinhXN
+    usecase "Thực hiện xét nghiệm & trả KQ" as UC_ThucHienXN
+    usecase "Chẩn đoán bệnh" as UC_ChanDoan
+    usecase "Kê toa thuốc" as UC_KeToa
+    usecase "Kiểm tra tương tác thuốc & tiền sử" as UC_KiemTraThuoc
+    usecase "Nhận toa thuốc" as UC_NhanToa
+}
+
+BN --> UC_DK
+NV --> UC_DK
+
+UC_DK <.. UC_MoHS : <<extend>>\n(khám lần đầu)
+UC_DK <.. UC_TraCuuHS : <<extend>>\n(đã có hồ sơ)
+
+BS --> UC_Kham
+BN --> UC_Kham
+UC_Kham ..> UC_GhiTrieuChung : <<include>>
+
+UC_Kham <.. UC_ChiDinhXN : <<extend>>\n(nếu cần)
+BS --> UC_ChiDinhXN
+
+KTV --> UC_ThucHienXN
+BN --> UC_ThucHienXN
+UC_ChiDinhXN ..> UC_ThucHienXN : <<trigger>>
+
+BS --> UC_ChanDoan
+BS --> UC_KeToa
+UC_KeToa ..> UC_KiemTraThuoc : <<include>>
+
+BN --> UC_NhanToa
+UC_KeToa ..> UC_NhanToa : <<trigger>>
+@enduml
